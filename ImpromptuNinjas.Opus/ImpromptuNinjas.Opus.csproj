@@ -1,0 +1,128 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PackageOutputPath>$(SolutionDir)</PackageOutputPath>
+        <IncludeSource>False</IncludeSource>
+        <LangVersion>8</LangVersion>
+        <TargetFrameworks>net45;netstandard1.1;netstandard1.4;netstandard2.0;netstandard2.1;netcoreapp31</TargetFrameworks>
+        <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>ImpromptuNinjas.Opus</PackageId>
+        <Title>ImpromptuNinjas.Opus</Title>
+        <Description>A multi-platform .NET binding of the library build of Xiph's Opus codec project.</Description>
+        <Authors>Tyler Young</Authors>
+        <Copyright>Copyright © 2020 Tyler Young</Copyright>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageOutputDir>$(SolutionDir)</PackageOutputDir>
+        <RepositoryUrl>https://github.com/ImpromptuNinjas/Opus.git</RepositoryUrl>
+        <PackageTags>opus libopus xiph celt skype silk audio codec rfc6716</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
+        <IsPackable>True</IsPackable>
+        <GenerateAssemblyConfigurationAttribute>False</GenerateAssemblyConfigurationAttribute>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="InfoOf.Fody" Version="2.0.1" />
+        <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" PrivateAssets="All" />
+        <PackageReference Include="Fody" Version="6.2.0" PrivateAssets="All" />
+        <PackageReference Include="InlineIL.Fody" Version="1.5.0" PrivateAssets="All">
+            <GeneratePathProperty>true</GeneratePathProperty>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <Choose>
+        <When Condition="'$(TargetFramework)'=='net45'">
+            <ItemGroup>
+                <PackageReference Include="System.Buffers" Version="4.5.1" />
+                <PackageReference Include="System.Memory" Version="4.5.1" />
+                <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
+                <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+                <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.4" />
+                <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+            </ItemGroup>
+        </When>
+        <When Condition="$(TargetFramework.StartsWith('netcoreapp'))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.4" />
+            </ItemGroup>
+        </When>
+        <When Condition="$(TargetFramework.StartsWith('netstandard'))">
+            <Choose>
+                <When Condition="$(TargetFramework.EndsWith('2.1'))">
+                    <ItemGroup>
+                        <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.4" />
+                        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
+                    </ItemGroup>
+                </When>
+                <When Condition="$(TargetFramework.EndsWith('2.0'))">
+                    <ItemGroup>
+                        <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.4" />
+                        <PackageReference Include="System.Memory" Version="4.5.4" />
+                    </ItemGroup>
+                </When>
+                <When Condition="$(TargetFramework.EndsWith('1.4'))">
+                    <PropertyGroup>
+                        <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+                    </PropertyGroup>
+                    <ItemGroup>
+                        <PackageReference Include="System.Memory" Version="4.5.4" />
+                        <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+                        <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.4" />
+                    </ItemGroup>
+                </When>
+                <When Condition="$(TargetFramework.EndsWith('1.1'))">
+                    <PropertyGroup>
+                        <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+                    </PropertyGroup>
+                    <ItemGroup>
+                        <PackageReference Include="System.Collections" Version="4.3.0" />
+                        <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+                        <PackageReference Include="System.Threading" Version="4.3.0" />
+                        <PackageReference Include="System.Memory" Version="4.5.4" />
+                    </ItemGroup>
+                </When>
+            </Choose>
+        </When>
+    </Choose>
+
+    <ItemGroup>
+        <Content Include="runtimes\*\**">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>True</PackageCopyToOutput>
+            <PackagePath>runtimes\</PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>%(Identity)</Link>
+        </Content>
+        <None Include="..\icon.png">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath />
+            <Link>icon.png</Link>
+        </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath />
+            <Link>README.md</Link>
+        </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Remove="*.csproj.*" />
+        <None Include="..\Directory.Build.props">
+            <Link>Directory.Build.props</Link>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="**\*.*.cs">
+            <WouldDependOn>$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)', '^(.*?)\..*$', '$1.cs'))</WouldDependOn>
+            <DependentUpon Condition="'%(DependentUpon)' == '' And '%(WouldDependOn)' != '%(Filename)'">%(WouldDependOn)</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+</Project>

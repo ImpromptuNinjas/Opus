@@ -1,0 +1,8 @@
+*.nuspec
+crosstests.sh
+Dockerfile
+Dockerfile.*
+**/bin/**
+**/obj/**
+TestResult.*
+TestResults
