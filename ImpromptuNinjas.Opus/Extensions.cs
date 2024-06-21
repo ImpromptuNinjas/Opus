@@ -1,14 +1,7 @@
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using JetBrains.Annotations;
+namespace ImpromptuNinjas.Opus;
 
-namespace ImpromptuNinjas.Opus {
-
-  [PublicAPI]
-  public static partial class Extensions {
+[PublicAPI]
+public static partial class Extensions {
 
 #if NETSTANDARD1_1
     internal static TValue GetOrCreateValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new() {
@@ -19,54 +12,54 @@ namespace ImpromptuNinjas.Opus {
     }
 #endif
 
-    internal static string GetLocalCodeBaseDirectory(this Assembly asm)
+  internal static string GetLocalCodeBaseDirectory(this Assembly asm)
 #if NETSTANDARD1_1 || NETSTANDARD1_4
       => Path.GetDirectoryName(new Uri((asm.ManifestModule?.FullyQualifiedName
           ?? throw new PlatformNotSupportedException()).Replace("#", "%23")).LocalPath)
         ?? throw new PlatformNotSupportedException();
 #else
-      => Path.GetDirectoryName(new Uri((asm.CodeBase
-            ?? throw new PlatformNotSupportedException())
-          .Replace("#", "%23")).LocalPath)
-        ?? throw new PlatformNotSupportedException();
+    => Path.GetDirectoryName(new Uri((asm.CodeBase
+          ?? throw new PlatformNotSupportedException())
+        .Replace("#", "%23")).LocalPath)
+      ?? throw new PlatformNotSupportedException();
 #endif
 
 #if NETSTANDARD1_1 || NETSTANDARD1_4
     internal static Assembly GetAssembly(this Type type)
       => type.GetTypeInfo().Assembly;
 #else
-    internal static Assembly GetAssembly(this Type type)
-      => type.Assembly;
+  internal static Assembly GetAssembly(this Type type)
+    => type.Assembly;
 #endif
 
-    internal static unsafe int CompareTo(this UIntPtr a, UIntPtr b)
-      => sizeof(UIntPtr) == 8
-        ? a.ToUInt64().CompareTo(b.ToUInt64())
-        : a.ToUInt32().CompareTo(b.ToUInt32());
+  internal static unsafe int CompareTo(this UIntPtr a, UIntPtr b)
+    => sizeof(UIntPtr) == 8
+      ? a.ToUInt64().CompareTo(b.ToUInt64())
+      : a.ToUInt32().CompareTo(b.ToUInt32());
 
-    internal static bool GreaterThan(this UIntPtr a, UIntPtr b)
-      => a.CompareTo(b) > 0;
+  internal static bool GreaterThan(this UIntPtr a, UIntPtr b)
+    => a.CompareTo(b) > 0;
 
-    internal static bool LessThan(this UIntPtr a, UIntPtr b)
-      => a.CompareTo(b) < 0;
+  internal static bool LessThan(this UIntPtr a, UIntPtr b)
+    => a.CompareTo(b) < 0;
 
-    internal static bool GreaterThanOrEqualTo(this UIntPtr a, UIntPtr b)
-      => a.CompareTo(b) >= 0;
+  internal static bool GreaterThanOrEqualTo(this UIntPtr a, UIntPtr b)
+    => a.CompareTo(b) >= 0;
 
-    internal static bool LessThanOrEqualTo(this UIntPtr a, UIntPtr b)
-      => a.CompareTo(b) <= 0;
+  internal static bool LessThanOrEqualTo(this UIntPtr a, UIntPtr b)
+    => a.CompareTo(b) <= 0;
 
-    internal static unsafe bool EqualTo(this UIntPtr a, int b)
-      => sizeof(UIntPtr) == 8
-        ? checked((long) a.ToUInt64()) == b
-        : a.ToUInt32() == b;
+  internal static unsafe bool EqualTo(this UIntPtr a, int b)
+    => sizeof(UIntPtr) == 8
+      ? checked((long) a.ToUInt64()) == b
+      : a.ToUInt32() == b;
 
-    internal static unsafe bool EqualTo(this UIntPtr a, long b)
-      => sizeof(UIntPtr) == 8
-        ? checked((long) a.ToUInt64()) == b
-        : a.ToUInt32() == b;
+  internal static unsafe bool EqualTo(this UIntPtr a, long b)
+    => sizeof(UIntPtr) == 8
+      ? checked((long) a.ToUInt64()) == b
+      : a.ToUInt32() == b;
 
-#if !NETSTANDARD2_1 && !NETCOREAPP
+#if !NETSTANDARD2_1 && !NET
     internal static void Write(this Stream stream, ReadOnlySpan<byte> bytes) {
       var count = bytes.Length;
       var copy = ArrayPool<byte>.Shared.Rent(count);
@@ -93,7 +86,5 @@ namespace ImpromptuNinjas.Opus {
       }
     }
 #endif
-
-  }
 
 }

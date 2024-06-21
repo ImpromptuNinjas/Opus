@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OpenAL Samples" type="DotNetProject" factoryName=".NET Project">
+    <option name="EXE_PATH" value="$PROJECT_DIR$/OpenAlDemo/bin/Debug/net9.0/OpenAlDemo.exe" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;..\..\..\..\samples\35_SQAM_glockenspiel_cut.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\Changes.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\girl.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\Hotel California.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\Last_Of_The_Mohicanz__Sample_.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\Robots_old.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\The Chastising of Renegade.opus1.1.b96k.opus&quot; &quot;..\..\..\..\samples\Through The Fire And Flames.opus1.1.b96k.opus&quot;" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/OpenAlDemo/bin/Debug/net9.0" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <option name="USE_MONO" value="0" />
+    <option name="RUNTIME_ARGUMENTS" value="" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/OpenAlDemo/OpenAlDemo.csproj" />
+    <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+    <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+    <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+    <option name="PROJECT_KIND" value="DotNetCore" />
+    <option name="PROJECT_TFM" value="net9.0" />
+    <method v="2">
+      <option name="Build" />
+    </method>
+  </configuration>
+</component>

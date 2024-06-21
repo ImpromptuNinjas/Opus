@@ -1,11 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
+namespace ImpromptuNinjas.Opus;
 
-namespace ImpromptuNinjas.Opus {
-
-  public static partial class Native {
+internal static partial class Native {
 
 #if NETSTANDARD1_1
     internal static class Posix {
@@ -22,7 +17,7 @@ namespace ImpromptuNinjas.Opus {
     }
 #endif
 
-    private static bool IsMusl() {
+  private static bool IsMusl() {
 #if NETSTANDARD1_1
       var cpu = RuntimeInformation.ProcessArchitecture;
       switch (cpu) {
@@ -37,25 +32,25 @@ namespace ImpromptuNinjas.Opus {
         default: throw new PlatformNotSupportedException(cpu.ToString());
       }
 #else
-      using (var proc = Process.GetCurrentProcess()) {
-        foreach (ProcessModule mod in proc.Modules) {
-          var fileName = mod.FileName;
+    using (var proc = Process.GetCurrentProcess()) {
+      foreach (ProcessModule mod in proc.Modules) {
+        var fileName = mod.FileName;
 
-          if (!fileName.Contains("libc"))
-            continue;
+        if (!fileName.Contains("libc"))
+          continue;
 
-          if (fileName.Contains("musl"))
-            return true;
+        if (fileName.Contains("musl"))
+          return true;
 
-          break;
-        }
+        break;
       }
-
-      return false;
-#endif
     }
 
-    private static string GetProcArchString() {
+    return false;
+#endif
+  }
+
+  private static string GetProcArchString() {
       var cpu = RuntimeInformation.ProcessArchitecture;
       switch (cpu) {
         case Architecture.X86:
@@ -69,7 +64,5 @@ namespace ImpromptuNinjas.Opus {
         default: throw new PlatformNotSupportedException(cpu.ToString());
       }
     }
-
-  }
 
 }

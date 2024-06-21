@@ -1,11 +1,5 @@
 #if NETFRAMEWORK || NETSTANDARD
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 namespace ImpromptuNinjas.Opus {
 
   internal delegate IntPtr DllImportResolver(
@@ -22,11 +16,9 @@ namespace ImpromptuNinjas.Opus {
         : LibDl.Instance;
 
 #if !NETSTANDARD1_1
-    private static readonly ConditionalWeakTable<Assembly, LinkedList<DllImportResolver>> Resolvers
-      = new ConditionalWeakTable<Assembly, LinkedList<DllImportResolver>>();
+    private static readonly ConditionalWeakTable<Assembly, LinkedList<DllImportResolver>> Resolvers = new();
 #else
-    private static readonly Dictionary<Assembly, LinkedList<DllImportResolver>> Resolvers
-      = new Dictionary<Assembly, LinkedList<DllImportResolver>>();
+    private static readonly Dictionary<Assembly, LinkedList<DllImportResolver>> Resolvers = new();
 #endif
 
     public static void SetDllImportResolver(Assembly assembly, DllImportResolver resolver) {
